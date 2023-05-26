@@ -326,9 +326,24 @@ IF %CPU_CORES% GTR %NUMBER_OF_PROCESSORS% (
 )
 :: Checking variable: PORT
 IF ["%PORT%"] == [""] (
-	SET PORT="2302"
+	SET PORT=2302
 	ECHO [INFO] No value has been defined for "PORT".
-	ECHO [INFO] Fallback: (!PORT!^)
+	ECHO [INFO] Fallback: ("!PORT!"^)
+	@ TIMEOUT 1 >NUL
+	ECHO.
+)
+SET NUM_CHECK=
+FOR /f "delims=0123456789" %%i IN ("%PORT%") DO SET NUM_CHECK=%%i
+IF DEFINED NUM_CHECK (
+	SET PORT=2302
+	ECHO [INFO] Defined value is not numeric for "PORT".
+	ECHO [INFO] Fallback: ("!PORT!"^)
+	@ TIMEOUT 1 >NUL
+	ECHO.
+) ELSE IF %PORT% LEQ 1 (
+	SET PORT=2302
+	ECHO [INFO] The value is lower than the minimum for "PORT".
+	ECHO [INFO] Fallback: ("!PORT!"^)
 	@ TIMEOUT 1 >NUL
 	ECHO.
 )
