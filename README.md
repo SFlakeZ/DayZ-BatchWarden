@@ -49,7 +49,7 @@ SET DAYZ_EXE=""
 
 :: Logical CPU cores
 :: DEFAULT -> CPU_CORES="%NUMBER_OF_PROCESSORS%"
-SET CPU_CORES=%NUMBER_OF_PROCESSORS%
+SET CPU_CORES=""
 
 :: Set the port of the DayZ-Standalone-Server (optional)
 :: DEFAULT -> PORT="2302"

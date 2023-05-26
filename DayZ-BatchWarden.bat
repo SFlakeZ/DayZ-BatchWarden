@@ -24,7 +24,7 @@ SET DAYZ_EXE=""
 
 :: Logical CPU cores (optional)
 :: DEFAULT -> CPU_CORES="%NUMBER_OF_PROCESSORS%"
-SET CPU_CORES=%NUMBER_OF_PROCESSORS%
+SET CPU_CORES=""
 
 :: Set the port of the DayZ-Standalone-Server (optional)
 :: DEFAULT -> PORT="2302"
@@ -253,6 +253,7 @@ IF %UTD_MODS% == false (
 SET WINDOW_NAME=%WINDOW_NAME:"=%
 SET SERVER_PATH=%SERVER_PATH:"=%
 SET DAYZ_EXE=%DAYZ_EXE:"=%
+SET CPU_CORES=%CPU_CORES:"=%
 SET PORT=%PORT:"=%
 SET CONFIG=%CONFIG:"=%
 SET PROFILE=%PROFILE:"=%
@@ -299,6 +300,27 @@ IF ["%DAYZ_EXE%"] == [""] (
 	SET DAYZ_EXE="DayZServer_x64.exe"
 	ECHO [INFO] No value has been defined for "DAYZ_EXE".
 	ECHO [INFO] Fallback: (!DAYZ_EXE!^)
+	@ TIMEOUT 1 >NUL
+	ECHO.
+)
+:: Checking variable: CPU_CORES
+IF ["%CPU_CORES%"] == [""] (
+	SET CPU_CORES=%NUMBER_OF_PROCESSORS%
+	ECHO [INFO] No value has been defined for "CPU_CORES".
+	ECHO [INFO] Fallback: ("!CPU_CORES!"^)
+	@ TIMEOUT 1 >NUL
+	ECHO.
+)
+IF %CPU_CORES% GTR %NUMBER_OF_PROCESSORS% (
+	SET CPU_CORES="%NUMBER_OF_PROCESSORS%"
+	ECHO [INFO] The value is greater than the maximum for "CPU_CORES".
+	ECHO [INFO] Fallback: (!CPU_CORES!^)
+	@ TIMEOUT 1 >NUL
+	ECHO.
+) ELSE IF %CPU_CORES% LEQ 1 (
+	SET CPU_CORES="1"
+	ECHO [INFO] The value is lower than the minimum for "CPU_CORES".
+	ECHO [INFO] Fallback: (!CPU_CORES!^)
 	@ TIMEOUT 1 >NUL
 	ECHO.
 )
