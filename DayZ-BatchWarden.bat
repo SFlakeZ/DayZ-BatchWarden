@@ -35,7 +35,7 @@ SET PORT=""
 SET CONFIG=""
 
 :: Set a path for your profiles folder
-:: DEFAULT -> PROFILE="X:\YourServerLocation\1-Profiles"
+:: DEFAULT -> PROFILE="!SERVER_PATH!\1-Profiles"
 SET PROFILE=""
 
 :: Set FPS limit for the server. (max is 200)
@@ -106,8 +106,9 @@ SET USE_STEAMCMD=true
 :: Path to the SteamCMD folder (required)
 SET STEAMCMD_PATH="C:\Program Files\steamcmd"
 
-:: Name of the executable (optional)
-SET STEAMCMD_EXE="SteamCMD.exe"
+:: Name of executable (optional)
+:: DEFAULT -> STEAMCMD_EXE="steamcmd.exe"
+SET STEAMCMD_EXE=""
 
 :: Name of the Steam account that SteamCMD uses (required)
 :: It is highly advised that you use a separate Steam account
@@ -117,7 +118,8 @@ SET ACCOUNT_NAME=""
 :: Path to the Update/Download folder (optional)
 :: The download folder is only used to download mods
 :: and synchronize them with the existing server files
-SET DOWNLOAD_PATH="C:\dayz\0-updates"
+:: DEFAULT -> DOWNLOAD_PATH="!SERVER_PATH!\0-Download"
+SET DOWNLOAD_PATH=""
 
 
 :: =============================================== ::
@@ -266,6 +268,7 @@ SET BEC_PATH=%BEC_PATH:"=%
 SET BEC_EXE=%BEC_EXE:"=%
 :: SteamCMD - variables
 SET STEAMCMD_PATH=%STEAMCMD_PATH:"=%
+SET STEAMCMD_EXE=%STEAMCMD_EXE:"=%
 SET ACCOUNT_NAME=%ACCOUNT_NAME:"=%
 SET DOWNLOAD_PATH=%DOWNLOAD_PATH:"=%
 :: DZSAL - variables
@@ -440,7 +443,7 @@ IF %USE_BEC% == true (
 		)
 	)
 )
-:: Checking variable: STEAMCMD_PATH
+:: Checking variables: STEAMCMD_PATH, STEAMCMD_EXE, ACCOUNT_NAME, DOWNLOAD_PATH
 IF %USE_STEAMCMD% == true (
 	IF ["%STEAMCMD_PATH%"] == [""] (
 		ECHO [INFO] No value has been defined for "STEAMCMD_PATH".
@@ -449,12 +452,35 @@ IF %USE_STEAMCMD% == true (
 		@ TIMEOUT 1 >NUL
 		ECHO.
 	) ELSE (
-		IF NOT EXIST "!STEAMCMD_PATH:\\=\!\steamcmd.exe" (
-			ECHO [WARN] Could not find "steamcmd.exe" in "!STEAMCMD_PATH!".
-			ECHO [INFO] Temporarly disabling SteamCMD startup.
+		IF ["%STEAMCMD_EXE%"] == [""] (
+			SET STEAMCMD_EXE=steamcmd.exe
+			ECHO [INFO] No value has been defined for "STEAMCMD_EXE".
+			ECHO [INFO] Fallback: ("!STEAMCMD_EXE!"^)
+			@ TIMEOUT 1 >NUL
+			ECHO.
+		)
+		IF NOT EXIST "!STEAMCMD_PATH:\\=\!\!STEAMCMD_EXE!" (
+			ECHO [WARN] Could not find "!STEAMCMD_EXE!" in "!STEAMCMD_PATH!".
+			ECHO [INFO] Disabling SteamCMD feature.
 			SET USE_STEAMCMD=false
 			@ TIMEOUT 1 >NUL
 			ECHO.
+		) ELSE (
+			IF ["%ACCOUNT_NAME%"] == [""] (
+				ECHO [INFO] No value has been defined for "ACCOUNT_NAME".
+				ECHO [INFO] Disabling SteamCMD feature.
+				SET USE_STEAMCMD=false
+				@ TIMEOUT 1 >NUL
+				ECHO.
+			) ELSE (
+				IF ["%DOWNLOAD_PATH%"] == [""] (
+					SET DOWNLOAD_PATH="!SERVER_PATH!\0-Download"
+					ECHO [INFO] No value has been defined for "DOWNLOAD_PATH".
+					ECHO [INFO] Fallback: (!DOWNLOAD_PATH!^)
+					@ TIMEOUT 1 >NUL
+					ECHO.
+				)
+			)
 		)
 	)
 )
