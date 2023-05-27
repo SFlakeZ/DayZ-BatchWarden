@@ -1,6 +1,5 @@
 # DayZ Standalone - BatchWarden
 ## Description
-Work in progress!  
 DayZ-BatchWarden is a feature-rich script designed to streamline the management of your DayZ server.  
 It automates crucial tasks such as starting the server, installing and updating Steam Workshop Mods,  
 managing server files, monitoring for crashes, and creating regular backups.  
@@ -59,25 +58,26 @@ SET PORT=""
 :: DEFAULT -> CONFIG="serverDZ.cfg"
 SET CONFIG=""
 
-:: Set a path for your profiles folder
-:: DEFAULT -> PROFILE="X:\YourServerLocation\1-Profiles"
+:: Set a path for your profiles folder (optional)
+:: DEFAULT -> PROFILE="!SERVER_PATH!\1-Profiles"
 SET PROFILE=""
 
-:: Set FPS limit for the server. (max is 200)
+:: Set FPS limit for the server. (optional)
+:: (max: 200)
 :: DEFAULT -> FPS_LIMIT="200"
 SET FPS_LIMIT=""
 
-:: Set to true to enable, false to disable
+:: Set to true to enable, false to disable (optional)
 SET USE_MODS=true
-	:: Path to the modlist.txt
+	:: Path to the modlist.txt (optional)
 	SET MODLIST_PATH=""
 
-:: Set to true to enable, false to disable
+:: Set to true to enable, false to disable (optional)
 SET USE_SERVER_MODS=false
-	:: Path to the modlist_server.txt
+	:: Path to the modlist_server.txt (optional)
 	SET MODLIST_SERVER_PATH=""
 
-:: Extra launch parameters
+:: Extra launch parameters (optional)
 :: For more info see: https://community.bistudio.com/wiki/DayZ:Server_Configuration
 :: In general, these parameters do not need to be adjusted
 SET ADDITIONAL_PARAMETERS="-doLogs -adminLog -netLog -freezeCheck -filePatching"
@@ -85,14 +85,15 @@ SET ADDITIONAL_PARAMETERS="-doLogs -adminLog -netLog -freezeCheck -filePatching"
 ## Automatic Restart (optional)
 ## SteamCMD - Automatic Updates (optional)
 ```bat
-:: Enable/Disable SteamCMD-Updater to update/download mods and server files
+:: Enable/Disable SteamCMD-Updater to update/download mods and server files (optional)
 SET USE_STEAMCMD=true
 
 :: Path to the SteamCMD folder (required)
 SET STEAMCMD_PATH="C:\Program Files\steamcmd\"
 
 :: Name of the executable (optional)
-SET STEAMCMD_EXE="SteamCMD.exe"
+:: DEFAULT -> STEAMCMD_EXE="steamcmd.exe"
+SET STEAMCMD_EXE=""
 
 :: Name of the Steam account that SteamCMD uses (required)
 :: It is highly advised that you use a separate Steam account
@@ -102,7 +103,8 @@ SET ACCOUNT_NAME="YourSteamAccount"
 :: Path to the Update/Download folder (optional)
 :: The download folder is only used to download mods
 :: and synchronize them with the existing server files
-SET DOWNLOAD_PATH="C:\dayz\0-updates"
+:: DEFAULT -> DOWNLOAD_PATH="!SERVER_PATH!\0-Download"
+SET DOWNLOAD_PATH=""
 ```
 ## BattlEye-Extended-Controls (optional)
 To use this feature, you need to [download](https://github.com/TheGamingChief/BattlEye-Extended-Controls/archive/refs/heads/master.zip) BEC.  
@@ -112,7 +114,7 @@ With the [BEC-Schedulder](https://github.com/TheGamingChief/BattlEye-Extended-Co
 Another important point is that the time to wait for the initialization of BEC must be adjusted to the server start time.  
 This setting can be adjusted in the [config](https://github.com/TheGamingChief/BattlEye-Extended-Controls/blob/master/Config/Config.cfg#L139).  
 ```bat
-:: Enable/Disable BattlEye-Extented-Controls
+:: Enable/Disable BattlEye-Extented-Controls (optional)
 SET USE_BEC=false
 
 :: Path to the BattlEye-Extended-Controls folder (optional)
@@ -124,10 +126,11 @@ SET BEC_EXE="Bec.exe"
 ## DayZ SA - Launcher (optional)
 not recommended, limited startup parameters.
 ```bat
-:: Set to true to enable, false to disable
+:: Set to true to enable, false to disable (optional)
 SET USE_DZSAL=false
 
 :: Path to the DZSAL folder (optional)
+:: DEFAULT -> DZSAL_PATH="!SERVER_PATH!"
 SET DZSAL_PATH=""
 
 :: Name of DayZ SA Launcher Mod Server exe (optional)
