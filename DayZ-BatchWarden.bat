@@ -132,6 +132,7 @@ SET DOWNLOAD_PATH=""
 SET USE_DZSAL=false
 
 :: Path to the DZSAL folder (optional)
+:: DEFAULT -> DZSAL_PATH="!SERVER_PATH!"
 SET DZSAL_PATH=""
 
 :: Name of DayZ SA Launcher Mod Server exe (optional)
@@ -484,22 +485,19 @@ IF %USE_STEAMCMD% == true (
 		)
 	)
 )
-:: Checking variable: DZSAL_EXE
+:: Checking variables: DZSAL_EXE, DZSAL_PATH
 IF %USE_DZSAL% == true (
-		IF ["%DZSAL_EXE%"] == [""] (
-		SET DZSAL_EXE="DZSALModServer.exe"
+	IF ["%DZSAL_EXE%"] == [""] (
+		SET DZSAL_EXE=DZSALModServer.exe
 		ECHO [INFO] No value has been defined for "DZSAL_EXE".
-		ECHO [INFO] Fallback: (!DZSAL_EXE!^)
+		ECHO [INFO] Fallback: ("!DZSAL_EXE!"^)
 		@ TIMEOUT 1 >NUL
 		ECHO.
 	)
-)
-:: Checking variable: DZSAL_PATH
-IF %USE_DZSAL% == true (
 	IF ["%DZSAL_PATH%"] == [""] (
 		IF NOT EXIST "!SERVER_PATH:\\=\!\!DZSAL_EXE!" (
 			ECHO [WARN] Could not find "!DZSAL_EXE!" in "!SERVER_PATH!".
-			ECHO [INFO] Temporarly disabling DZSAL-Modserver startup.
+			ECHO [INFO] Disabling DZSAL-Modserver.
 			SET USE_DZSAL=false
 			@ TIMEOUT 1 >NUL
 			ECHO.
@@ -507,6 +505,14 @@ IF %USE_DZSAL% == true (
 			SET DZSAL_PATH="!SERVER_PATH!"
 			ECHO [INFO] No value has been defined for "DZSAL_PATH".
 			ECHO [INFO] Fallback: (!DZSAL_PATH!^)
+			@ TIMEOUT 1 >NUL
+			ECHO.
+		)
+	) ELSE (
+		IF NOT EXIST "!DZSAL_PATH:\\=\!\!DZSAL_EXE!" (
+			ECHO [WARN] Could not find "!DZSAL_EXE!" in "!DZSAL_PATH!".
+			ECHO [INFO] Disabling DZSAL-Modserver.
+			SET USE_DZSAL=false
 			@ TIMEOUT 1 >NUL
 			ECHO.
 		)
