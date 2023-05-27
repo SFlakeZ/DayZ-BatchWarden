@@ -379,14 +379,21 @@ IF ["%FPS_LIMIT%"] == [""] (
 	@ TIMEOUT 1 >NUL
 	ECHO.
 )
-IF %FPS_LIMIT% GTR 200 (
+SET NUM_CHECK=
+FOR /f "delims=0123456789" %%i IN ("%FPS_LIMIT%") DO SET NUM_CHECK=%%i
+IF DEFINED NUM_CHECK (
+	SET FPS_LIMIT="200"
+	ECHO [INFO] Defined value is not numeric for "FPS_LIMIT".
+	ECHO [INFO] Fallback: (!FPS_LIMIT!^)
+	@ TIMEOUT 1 >NUL
+	ECHO.
+) ELSE IF %FPS_LIMIT% GTR 200 (
 	SET FPS_LIMIT="200"
 	ECHO [INFO] The value is greater than the maximum for "FPS_LIMIT".
 	ECHO [INFO] Fallback: (!FPS_LIMIT!^)
 	@ TIMEOUT 1 >NUL
 	ECHO.
-)
-IF %FPS_LIMIT% LEQ 1 (
+) ELSE IF %FPS_LIMIT% LEQ 1 (
 	SET FPS_LIMIT="200"
 	ECHO [INFO] The value is lower than the minimum for "FPS_LIMIT".
 	ECHO [INFO] Fallback: (!FPS_LIMIT!^)
