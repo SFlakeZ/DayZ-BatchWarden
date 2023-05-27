@@ -237,12 +237,16 @@ IF %UTD_MODS% == false (
 			ECHO [STATUS] Configuration:
 			CALL :COLOR 0a "  OKAY"
 			ECHO.
-			ECHO [STATUS] Updating server files:
-			CALL :COLOR 0a "  DONE"
-			ECHO.
-			ECHO [STATUS] Updating mods:
-			CALL :COLOR 0a "  DONE"
-			ECHO.
+			IF %UTD_SERVER% == true (
+				ECHO [STATUS] Updating server files:
+				CALL :COLOR 0a "  DONE"
+				ECHO.
+				ECHO [STATUS] Updating mods:
+				CALL :COLOR 0a "  DONE"
+				ECHO.
+			)
+			@ TIMEOUT 1 >NUL
+			ECHO [INFO] Starting server...
 			SET RDY_START=true
 			@ TIMEOUT 4 >NUL
 			GOTO PRINT_LOGO
@@ -450,6 +454,7 @@ IF %USE_STEAMCMD% == true (
 		ECHO [INFO] No value has been defined for "STEAMCMD_PATH".
 		ECHO [INFO] Disabling SteamCMD feature.
 		SET USE_STEAMCMD=false
+		SET UTD_MODS=true
 		@ TIMEOUT 1 >NUL
 		ECHO.
 	) ELSE (
@@ -464,6 +469,7 @@ IF %USE_STEAMCMD% == true (
 			ECHO [WARN] Could not find "!STEAMCMD_EXE!" in "!STEAMCMD_PATH!".
 			ECHO [INFO] Disabling SteamCMD feature.
 			SET USE_STEAMCMD=false
+			SET UTD_MODS=true
 			@ TIMEOUT 1 >NUL
 			ECHO.
 		) ELSE (
@@ -471,6 +477,7 @@ IF %USE_STEAMCMD% == true (
 				ECHO [INFO] No value has been defined for "ACCOUNT_NAME".
 				ECHO [INFO] Disabling SteamCMD feature.
 				SET USE_STEAMCMD=false
+				SET UTD_MODS=true
 				@ TIMEOUT 1 >NUL
 				ECHO.
 			) ELSE (
