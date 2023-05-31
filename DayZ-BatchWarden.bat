@@ -9,7 +9,7 @@
 :: Link: https://github.com/SFlakeZ/DayZ-BatchWarden
 
 :: DEFAULT -> DEBUG=false
-SET DEBUG=true
+SET DEBUG=false
 
 :: Command window name (optional)
 :: DEFAULT -> WINDOW_NAME="DayZ-BatchWarden"
@@ -189,6 +189,12 @@ SET RDY_START=false
 SET SCHEDULED_RESTARTS=0
 SET UNSCHEDULED_RESTARTS=0
 
+IF %DEBUG% == true (
+	SET DEBUG_PRINT=
+) ELSE (
+	SET "DEBUG_PRINT=>NUL"
+)
+
 :: Print logo - no other use
 :PRINT_LOGO
 TITLE %WINDOW_NAME%
@@ -290,133 +296,168 @@ IF %CFG_CHECKED% == true (
 :: Checking variable: WINDOW_NAME
 IF ["%WINDOW_NAME%"] == [""] (
 	SET WINDOW_NAME="DayZ-Standalone-Server"
-	ECHO [INFO] No value has been defined for "WINDOW_NAME".
-	ECHO [INFO] Fallback: (!WINDOW_NAME!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	TITLE %WINDOW_NAME%
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "WINDOW_NAME".
+		ECHO [INFO] Fallback: (!WINDOW_NAME!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: SERVER_PATH
 IF ["%SERVER_PATH%"] == [""] (
 	SET "SERVER_PATH=%~dp0"
-	ECHO [INFO] No value has been defined for "SERVER_PATH".
-	ECHO [INFO] Fallback: ("!SERVER_PATH!"^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "SERVER_PATH".
+		ECHO [INFO] Fallback: ("!SERVER_PATH!"^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: DAYZ_EXE
 IF ["%DAYZ_EXE%"] == [""] (
 	SET DAYZ_EXE="DayZServer_x64.exe"
-	ECHO [INFO] No value has been defined for "DAYZ_EXE".
-	ECHO [INFO] Fallback: (!DAYZ_EXE!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "DAYZ_EXE".
+		ECHO [INFO] Fallback: (!DAYZ_EXE!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: CPU_CORES
 IF ["%CPU_CORES%"] == [""] (
 	SET CPU_CORES=%NUMBER_OF_PROCESSORS%
-	ECHO [INFO] No value has been defined for "CPU_CORES".
-	ECHO [INFO] Fallback: ("!CPU_CORES!"^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "CPU_CORES".
+		ECHO [INFO] Fallback: ("!CPU_CORES!"^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 SET NUM_CHECK=
 FOR /f "delims=0123456789" %%i IN ("%CPU_CORES%") DO SET NUM_CHECK=%%i
 IF DEFINED NUM_CHECK (
 	SET CPU_CORES="%NUMBER_OF_PROCESSORS%"
-	ECHO [INFO] Defined value is not numeric for "CPU_CORES".
-	ECHO [INFO] Fallback: (!CPU_CORES!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] Defined value is not numeric for "CPU_CORES".
+		ECHO [INFO] Fallback: (!CPU_CORES!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 ) ELSE IF %CPU_CORES% GTR %NUMBER_OF_PROCESSORS% (
 	SET CPU_CORES="%NUMBER_OF_PROCESSORS%"
-	ECHO [INFO] The value is greater than the maximum for "CPU_CORES".
-	ECHO [INFO] Fallback: (!CPU_CORES!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] The value is greater than the maximum for "CPU_CORES".
+		ECHO [INFO] Fallback: (!CPU_CORES!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 ) ELSE IF %CPU_CORES% LEQ 1 (
 	SET CPU_CORES="1"
-	ECHO [INFO] The value is lower than the minimum for "CPU_CORES".
-	ECHO [INFO] Fallback: (!CPU_CORES!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] The value is lower than the minimum for "CPU_CORES".
+		ECHO [INFO] Fallback: (!CPU_CORES!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: PORT
 IF ["%PORT%"] == [""] (
 	SET PORT=2302
-	ECHO [INFO] No value has been defined for "PORT".
-	ECHO [INFO] Fallback: ("!PORT!"^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "PORT".
+		ECHO [INFO] Fallback: ("!PORT!"^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 SET NUM_CHECK=
 FOR /f "delims=0123456789" %%i IN ("%PORT%") DO SET NUM_CHECK=%%i
 IF DEFINED NUM_CHECK (
 	SET PORT=2302
-	ECHO [INFO] Defined value is not numeric for "PORT".
-	ECHO [INFO] Fallback: ("!PORT!"^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] Defined value is not numeric for "PORT".
+		ECHO [INFO] Fallback: ("!PORT!"^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 ) ELSE IF %PORT% LEQ 1 (
 	SET PORT=2302
-	ECHO [INFO] The value is lower than the minimum for "PORT".
-	ECHO [INFO] Fallback: ("!PORT!"^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] The value is lower than the minimum for "PORT".
+		ECHO [INFO] Fallback: ("!PORT!"^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: CONFIG
 IF ["%CONFIG%"] == [""] (
 	SET CONFIG="serverDZ.cfg"
-	ECHO [INFO] No value has been defined for "CONFIG".
-	ECHO [INFO] Fallback: (!CONFIG!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "CONFIG".
+		ECHO [INFO] Fallback: (!CONFIG!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: PROFILE
 IF ["%PROFILE%"] == [""] (
 	SET PROFILE="1-Profiles"
-	ECHO [INFO] No value has been defined for "PROFILE".
-	ECHO [INFO] Fallback: (!PROFILE!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "PROFILE".
+		ECHO [INFO] Fallback: (!PROFILE!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: FPS_LIMIT
 IF ["%FPS_LIMIT%"] == [""] (
 	SET FPS_LIMIT=200
-	ECHO [INFO] No value has been defined for "FPS_LIMIT".
-	ECHO [INFO] Fallback: ("!FPS_LIMIT!"^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] No value has been defined for "FPS_LIMIT".
+		ECHO [INFO] Fallback: ("!FPS_LIMIT!"^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 SET NUM_CHECK=
 FOR /f "delims=0123456789" %%i IN ("%FPS_LIMIT%") DO SET NUM_CHECK=%%i
 IF DEFINED NUM_CHECK (
 	SET FPS_LIMIT="200"
-	ECHO [INFO] Defined value is not numeric for "FPS_LIMIT".
-	ECHO [INFO] Fallback: (!FPS_LIMIT!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] Defined value is not numeric for "FPS_LIMIT".
+		ECHO [INFO] Fallback: (!FPS_LIMIT!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 ) ELSE IF %FPS_LIMIT% GTR 200 (
 	SET FPS_LIMIT="200"
-	ECHO [INFO] The value is greater than the maximum for "FPS_LIMIT".
-	ECHO [INFO] Fallback: (!FPS_LIMIT!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] The value is greater than the maximum for "FPS_LIMIT".
+		ECHO [INFO] Fallback: (!FPS_LIMIT!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 ) ELSE IF %FPS_LIMIT% LEQ 1 (
 	SET FPS_LIMIT="200"
-	ECHO [INFO] The value is lower than the minimum for "FPS_LIMIT".
-	ECHO [INFO] Fallback: (!FPS_LIMIT!^)
-	@ TIMEOUT 1 >NUL
-	ECHO.
+	IF %DEBUG% == true (
+		ECHO [INFO] The value is lower than the minimum for "FPS_LIMIT".
+		ECHO [INFO] Fallback: (!FPS_LIMIT!^)
+		@ TIMEOUT 1 >NUL
+		ECHO.
+	)
 )
 :: Checking variable: MODLIST_PATH
 IF %USE_MODS% == true (
 	IF ["%MODLIST_PATH%"] == [""] (
 		SET "MODLIST_PATH=%~dp0"
 		SET MODLIST_PATH="!MODLIST_PATH!modlist.txt"
-		ECHO [INFO] No value has been defined for "MODLIST_PATH".
-		ECHO [INFO] Fallback: (!MODLIST_PATH!^)
-		@ TIMEOUT 1 >NUL
-		ECHO.
+		IF %DEBUG% == true (
+			ECHO [INFO] No value has been defined for "MODLIST_PATH".
+			ECHO [INFO] Fallback: (!MODLIST_PATH!^)
+			@ TIMEOUT 1 >NUL
+			ECHO.
+		)
 	)
 )
 :: Checking variable: MODLIST_SERVER_PATH
@@ -424,13 +465,15 @@ IF %USE_MODS_SERVER% == true (
 	IF ["%MODLIST_SERVER_PATH%"] == [""] (
 		SET "MODLIST_SERVER_PATH=%~dp0"
 		SET MODLIST_SERVER_PATH="!MODLIST_SERVER_PATH!modlist_server.txt"
-		ECHO [INFO] No value has been defined for "MODLIST_SERVER_PATH".
-		ECHO [INFO] Fallback: (!MODLIST_SERVER_PATH!^)
-		@ TIMEOUT 1 >NUL
-		ECHO.
+		IF %DEBUG% == true (
+			ECHO [INFO] No value has been defined for "MODLIST_SERVER_PATH".
+			ECHO [INFO] Fallback: (!MODLIST_SERVER_PATH!^)
+			@ TIMEOUT 1 >NUL
+			ECHO.
+		)
 	)
 )
-:: Checking variable: BEC_PATH
+:: Checking variable: BEC_PATH (add debug for match)
 IF %USE_BEC% == true (
 	IF ["%BEC_PATH%"] == [""] (
 		FOR /d %%i IN (%SERVER_PATH%*) DO (
@@ -441,9 +484,9 @@ IF %USE_BEC% == true (
 		)
 		IF ["!BEC_PATH!"] == [""] (
 			ECHO [WARN] Could not find "bec.exe" in "!SERVER_PATH!" and subfolders.
-			ECHO [INFO] Temporarly disabling BEC startup.
+			ECHO [INFO] Disabling BEC feature.
 			SET USE_BEC=false
-			@ TIMEOUT 1 >NUL
+			@ TIMEOUT 2 >NUL
 			ECHO.
 		)
 	)
@@ -455,22 +498,24 @@ IF %USE_STEAMCMD% == true (
 		ECHO [INFO] Disabling SteamCMD feature.
 		SET USE_STEAMCMD=false
 		SET UTD_MODS=true
-		@ TIMEOUT 1 >NUL
+		@ TIMEOUT 2 >NUL
 		ECHO.
 	) ELSE (
 		IF ["%STEAMCMD_EXE%"] == [""] (
 			SET STEAMCMD_EXE=steamcmd.exe
-			ECHO [INFO] No value has been defined for "STEAMCMD_EXE".
-			ECHO [INFO] Fallback: ("!STEAMCMD_EXE!"^)
-			@ TIMEOUT 1 >NUL
-			ECHO.
+			IF %DEBUG% == true (
+				ECHO [INFO] No value has been defined for "STEAMCMD_EXE".
+				ECHO [INFO] Fallback: ("!STEAMCMD_EXE!"^)
+				@ TIMEOUT 1 >NUL
+				ECHO.
+			)
 		)
 		IF NOT EXIST "!STEAMCMD_PATH:\\=\!\!STEAMCMD_EXE!" (
 			ECHO [WARN] Could not find "!STEAMCMD_EXE!" in "!STEAMCMD_PATH!".
 			ECHO [INFO] Disabling SteamCMD feature.
 			SET USE_STEAMCMD=false
 			SET UTD_MODS=true
-			@ TIMEOUT 1 >NUL
+			@ TIMEOUT 2 >NUL
 			ECHO.
 		) ELSE (
 			IF ["%ACCOUNT_NAME%"] == [""] (
@@ -478,15 +523,17 @@ IF %USE_STEAMCMD% == true (
 				ECHO [INFO] Disabling SteamCMD feature.
 				SET USE_STEAMCMD=false
 				SET UTD_MODS=true
-				@ TIMEOUT 1 >NUL
+				@ TIMEOUT 2 >NUL
 				ECHO.
 			) ELSE (
 				IF ["%DOWNLOAD_PATH%"] == [""] (
 					SET DOWNLOAD_PATH="!SERVER_PATH!\0-Download"
-					ECHO [INFO] No value has been defined for "DOWNLOAD_PATH".
-					ECHO [INFO] Fallback: (!DOWNLOAD_PATH!^)
-					@ TIMEOUT 1 >NUL
-					ECHO.
+					IF %DEBUG% == true (
+						ECHO [INFO] No value has been defined for "DOWNLOAD_PATH".
+						ECHO [INFO] Fallback: (!DOWNLOAD_PATH!^)
+						@ TIMEOUT 1 >NUL
+						ECHO.
+					)
 				)
 			)
 		)
@@ -496,31 +543,35 @@ IF %USE_STEAMCMD% == true (
 IF %USE_DZSAL% == true (
 	IF ["%DZSAL_EXE%"] == [""] (
 		SET DZSAL_EXE=DZSALModServer.exe
-		ECHO [INFO] No value has been defined for "DZSAL_EXE".
-		ECHO [INFO] Fallback: ("!DZSAL_EXE!"^)
-		@ TIMEOUT 1 >NUL
-		ECHO.
+		IF %DEBUG% == true (
+			ECHO [INFO] No value has been defined for "DZSAL_EXE".
+			ECHO [INFO] Fallback: ("!DZSAL_EXE!"^)
+			@ TIMEOUT 1 >NUL
+			ECHO.
+		)
 	)
 	IF ["%DZSAL_PATH%"] == [""] (
 		IF NOT EXIST "!SERVER_PATH:\\=\!\!DZSAL_EXE!" (
 			ECHO [WARN] Could not find "!DZSAL_EXE!" in "!SERVER_PATH!".
 			ECHO [INFO] Disabling DZSAL-Modserver.
 			SET USE_DZSAL=false
-			@ TIMEOUT 1 >NUL
+			@ TIMEOUT 2 >NUL
 			ECHO.
 		) ELSE (
 			SET DZSAL_PATH="!SERVER_PATH!"
-			ECHO [INFO] No value has been defined for "DZSAL_PATH".
-			ECHO [INFO] Fallback: (!DZSAL_PATH!^)
-			@ TIMEOUT 1 >NUL
-			ECHO.
+			IF %DEBUG% == true (
+				ECHO [INFO] No value has been defined for "DZSAL_PATH".
+				ECHO [INFO] Fallback: (!DZSAL_PATH!^)
+				@ TIMEOUT 1 >NUL
+				ECHO.
+			)
 		)
 	) ELSE (
 		IF NOT EXIST "!DZSAL_PATH:\\=\!\!DZSAL_EXE!" (
 			ECHO [WARN] Could not find "!DZSAL_EXE!" in "!DZSAL_PATH!".
 			ECHO [INFO] Disabling DZSAL-Modserver.
 			SET USE_DZSAL=false
-			@ TIMEOUT 1 >NUL
+			@ TIMEOUT 2 >NUL
 			ECHO.
 		)
 	)
@@ -532,7 +583,7 @@ GOTO DEQUOTE
 :: STEAMCMD - Update/Install DayZ-Standalone-Server
 :UPDATE_SERVER
 CD %STEAMCMD_PATH%
-%STEAMCMD_EXE% +force_install_dir %SERVER_PATH% +login %ACCOUNT_NAME% +"app_update 223350" validate +quit >NUL
+%STEAMCMD_EXE% +force_install_dir %SERVER_PATH% +login %ACCOUNT_NAME% +"app_update 223350" validate +quit
 SET UTD_SERVER=true
 GOTO PRINT_LOGO
 
@@ -543,17 +594,17 @@ SET MOD_IDS=
 FOR /f "tokens=1,2 delims=," %%g IN (%MODLIST_PATH%) DO (
 	SET MOD_IDS=!MOD_IDS!+workshop_download_item 221100 "%%g" 
 )
-%STEAMCMD_EXE% +force_install_dir %DOWNLOAD_PATH% +login %ACCOUNT_NAME% !MOD_IDS! +quit >NUL
+%STEAMCMD_EXE% +force_install_dir %DOWNLOAD_PATH% +login %ACCOUNT_NAME% !MOD_IDS! +quit %DEBUG_PRINT%
 FOR /f "tokens=1,2 delims=," %%g IN (%MODLIST_PATH%) DO (
-	robocopy "%DOWNLOAD_PATH%\steamapps\workshop\content\221100\%%g" "%SERVER_PATH%\%%h" *.* /mir >NUL
+	robocopy "%DOWNLOAD_PATH%\steamapps\workshop\content\221100\%%g" "%SERVER_PATH%\%%h" *.* /mir %DEBUG_PRINT%
 )
 SET SEARCH_PATH=%MODLIST_PATH%
 :: This part generates the modlist string which is used for a start up flag
-SET MODLIST="-mod=
+SET MODLIST=-mod=
 FOR /f "tokens=1,2 delims=," %%g IN (%MODLIST_PATH%) DO (
-	SET MODLIST=!MODLIST!%%h;
+	SET "MODLIST=!MODLIST!%%h;"
 )
-SET MODLIST=!MODLIST!"
+SET MODLIST=!MODLIST!
 GOTO SYNC_KEYS
 
 
@@ -567,17 +618,17 @@ SET MOD_SERVER_IDS=
 FOR /f "tokens=1,2 delims=," %%g IN (%MODLIST_SERVER_PATH%) DO (
 	SET MOD_SERVER_IDS=!MOD_SERVER_IDS!+workshop_download_item 221100 "%%g" 
 )
-%STEAMCMD_EXE% +force_install_dir %DOWNLOAD_PATH% +login %ACCOUNT_NAME% !MOD_SERVER_IDS! +quit >NUL
+%STEAMCMD_EXE% +force_install_dir %DOWNLOAD_PATH% +login %ACCOUNT_NAME% !MOD_SERVER_IDS! +quit %DEBUG_PRINT%
 FOR /f "tokens=1,2 delims=," %%g IN (%MODLIST_SERVER_PATH%) DO (
-	robocopy "%DOWNLOAD_PATH%\steamapps\workshop\content\221100\%%g" "%SERVER_PATH%\%%h" *.* /mir >NUL
+	robocopy "%DOWNLOAD_PATH%\steamapps\workshop\content\221100\%%g" "%SERVER_PATH%\%%h" *.* /mir %DEBUG_PRINT%
 )
 SET SEARCH_PATH=%MODLIST_SERVER_PATH%
 :: This part generates the server modlist string which is used for a start up flag
-SET MODLIST_SERVER="-serverMod=
+SET MODLIST_SERVER=-serverMod=
 FOR /f "tokens=1,2 delims=," %%g IN (%MODLIST_SERVER_PATH%) DO (
-	SET MODLIST_SERVER=!MODLIST_SERVER!%%h;
+	SET "MODLIST_SERVER=!MODLIST_SERVER!%%h;"
 )
-SET MODLIST_SERVER=!MODLIST_SERVER!"
+SET MODLIST_SERVER="!MODLIST_SERVER!"
 SET UTD_MODS_SERVER=true
 GOTO SYNC_KEYS
 
@@ -585,22 +636,30 @@ GOTO SYNC_KEYS
 :: BatchWarden - Sync *.bikey(s) from each mod/server mod with the servers keys folder (robocopy ... /NFL /NDL /NJH /NJS /nc /ns /np)
 :SYNC_KEYS
 FOR /f "tokens=1,2 delims=," %%g IN (%SEARCH_PATH%) DO (
-	ROBOCOPY "%SERVER_PATH%\%%h\keys" "%SERVER_PATH%\keys" *.bikey >NUL
+	ROBOCOPY "%SERVER_PATH%\%%h\keys" "%SERVER_PATH%\keys" *.bikey %DEBUG_PRINT%
 	IF !ERRORLEVEL! EQU 16 (
-		ROBOCOPY "%SERVER_PATH%\%%h\key" "%SERVER_PATH%\keys" *.bikey >NUL
+		ROBOCOPY "%SERVER_PATH%\%%h\key" "%SERVER_PATH%\keys" *.bikey %DEBUG_PRINT%
 		IF !ERRORLEVEL! EQU 16 (
 			ECHO [WARN] It seems that %%h has no "keys" or "key" folder.
-			ECHO [INFO] Please check the mod folder. Maybe it is only used for repacking purposes.
+			ECHO [INFO] Maybe it is only used for repacking purposes or a key is already installed.
+			ECHO [INFO] Please check the mod folder.
 			ECHO.
+			@ TIMEOUT 5 >NUL
 		)
 	)
 
 	IF !ERRORLEVEL! EQU 2 (
-		ECHO [INFO] Successfully synced keys for "%%h"! >NUL
-		ECHO [INFO] Some extra files or directories were detected. No files were copied. >NUL
+		IF %DEBUG% == true (
+			ECHO [INFO] Successfully synced keys for "%%h"!
+			ECHO [INFO] Some extra files or directories were detected. No files were copied.
+			@ TIMEOUT 1 >NUL
+		)
 	) ELSE IF !ERRORLEVEL! EQU 3 (
-			ECHO [INFO] Successfully synced keys for "%%h"! >NUL
-			ECHO [INFO] Some files were copied. Additional files were present. >NUL
+			IF %DEBUG% == true (
+				ECHO [INFO] Successfully synced keys for "%%h"!
+				ECHO [INFO] Some files were copied. Additional files were present.
+				@ TIMEOUT 1 >NUL
+			)
 	)
 )
 IF %UTD_MODS_SERVER% == false (
@@ -619,7 +678,7 @@ IF %ERRORLEVEL% == 0 GOTO LOOP
 
 IF %USE_DZSAL% == false (
 	CD %SERVER_PATH%
-	START "%WINDOW_NAME%" /MIN /D %SERVER_PATH% %DAYZ_EXE% -profiles=%PROFILE% -config=%CONFIG% -port=%PORT% -cpuCount=%CPU_CORES% -limitFPS=%FPS_LIMIT% %MODLIST% %MODLIST_SERVER% %ADDITIONAL_PARAMETERS%
+	START "%WINDOW_NAME%" /MIN /D %SERVER_PATH% %DAYZ_EXE% -profiles=%PROFILE% -config=%CONFIG% -port=%PORT% -cpuCount=%CPU_CORES% -limitFPS=%FPS_LIMIT% "%MODLIST%" %MODLIST_SERVER% %ADDITIONAL_PARAMETERS%
 	@ TIMEOUT 2 >NUL
 	ECHO [INFO] The server has been started.
 ) ELSE (
